@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 const apiUrl = import.meta.env.VITE_API_URL;
 
-
 const Login = () => {
   const [email, setEmail] = useState("deepak.kumar@google.com");
   const [password, setPassword] = useState("Deepak@123");
