@@ -1,10 +1,16 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import process from 'process';
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    allowedHosts: ["c500-2409-40d0-201b-9ad9-7930-ff46-36e6-1c7f.ngrok-free.app"]
-  }
-})
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+
+  return {
+    plugins: [react()],
+    server: {
+      allowedHosts: env.__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS
+        ? env.__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS.split(',')
+        : ['localhost'],
+    },
+  };
+});
