@@ -1,21 +1,25 @@
 import { useState } from "react";
 import axios from "axios";
 const apiUrl = import.meta.env.VITE_API_URL;
-
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/useSlice";
+import { Link } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("deepak.kumar@google.com");
   const [password, setPassword] = useState("Deepak@123");
+  const dispatch = useDispatch();
 
   const handleLogIn = async () => {
-   try {
-     const result = await axios.post(`${apiUrl}/api/auth/login`, {
-       email, password
-     }, { withCredentials: true });
-     console.log(result);
-   } catch (error) {
-     console.error(error)
-    
-   }
+    try {
+      const result = await axios.post(`${apiUrl}/auth/login`, {
+        email, password
+      }, { withCredentials: true });
+      console.log(result.data);
+      dispatch(addUser(result.data));
+    } catch (error) {
+      console.error(error)
+
+    }
   }
   return (
     <>
@@ -29,7 +33,7 @@ const Login = () => {
               </div>
               <input type="text" placeholder="example@gmail.com" className="input input-bordered w-full max-w-xs"
                 value={email}
-                onChange={(e) => {setEmail(e.target.value)}}
+                onChange={(e) => { setEmail(e.target.value) }}
               />
             </label>
             <label className="form-control w-full max-w-xs">
@@ -38,15 +42,15 @@ const Login = () => {
               </div>
               <input type="text" placeholder="********" className="input input-bordered w-full max-w-xs"
                 value={password}
-                onChange={(e) => {setPassword(e.target.value)}}
+                onChange={(e) => { setPassword(e.target.value) }}
               />
             </label>
             <div className="card-actions justify-center">
               <button onClick={handleLogIn} className="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-md">Login</button>
               <button className="btn btn-neutral btn-xs sm:btn-sm md:btn-md lg:btn-md">
-                <a href="/signup">
+                <Link to="/signup">
                   Signup
-                </a>
+                </Link>
               </button>
             </div>
           </div>
