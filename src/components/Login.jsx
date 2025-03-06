@@ -1,21 +1,26 @@
 import { useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const Login = () => {
   const [email, setEmail] = useState("deepak.kumar@google.com");
-  const [password, setPassword] = useState("Deepak@123");
-
+  const [password, setPassword] = useState("Deepak@1234");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogIn = async () => {
-   try {
-     const result = await axios.post(`${apiUrl}/auth/login`, {
-       email, password
-     }, { withCredentials: true });
-     console.log(result);
-   } catch (error) {
-     console.error(error)
-    
-   }
+    try {
+      const res = await axios.post(`${apiUrl}/auth/login`, {
+        email, password
+      }, { withCredentials: true });
+      dispatch(addUser(res.data.data));
+      return navigate("/")
+    } catch (err) {
+      console.error(err)
+
+    }
   }
   return (
     <>
@@ -29,7 +34,7 @@ const Login = () => {
               </div>
               <input type="text" placeholder="example@gmail.com" className="input input-bordered w-full max-w-xs"
                 value={email}
-                onChange={(e) => {setEmail(e.target.value)}}
+                onChange={(e) => { setEmail(e.target.value) }}
               />
             </label>
             <label className="form-control w-full max-w-xs">
@@ -38,7 +43,7 @@ const Login = () => {
               </div>
               <input type="text" placeholder="********" className="input input-bordered w-full max-w-xs"
                 value={password}
-                onChange={(e) => {setPassword(e.target.value)}}
+                onChange={(e) => { setPassword(e.target.value) }}
               />
             </label>
             <div className="card-actions justify-center">
